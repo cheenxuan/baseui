@@ -1,0 +1,2 @@
+rootProject.name='BaseUI'
+include ':app', ':base-ui'
