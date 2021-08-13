@@ -84,7 +84,7 @@ class UiAdapter(context: Context) : RecyclerView.Adapter<ViewHolder>() {
         val indexOfValue = footers.indexOfValue(view)
         if (indexOfValue < 0) return
         footers.removeAt(indexOfValue)
-        notifyItemRemoved(indexOfValue)
+        notifyItemRemoved(indexOfValue + getHeaderSize() + getOriginalItemSize())
     }
 
 
