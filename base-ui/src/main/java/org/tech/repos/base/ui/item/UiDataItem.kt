@@ -24,7 +24,7 @@ abstract class UiDataItem<Data, VH : RecyclerView.ViewHolder>(val data: Data?=nu
      * 返回该item的布局资源id
      */
     open fun getItemLayoutRes(): Int {
-        return -1;
+        return -1
     }
 
     /***
@@ -72,6 +72,7 @@ abstract class UiDataItem<Data, VH : RecyclerView.ViewHolder>(val data: Data?=nu
     open fun onViewDetachedFromWindow(holder: VH) {
 
     }
+    
     open fun onCreateViewHolder(parent: ViewGroup): VH? {
         return null
     }

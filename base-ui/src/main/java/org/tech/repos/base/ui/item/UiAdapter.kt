@@ -234,7 +234,8 @@ class UiAdapter(context: Context) : RecyclerView.Adapter<ViewHolder>() {
             }
             view = mInflater!!.inflate(layoutRes, parent, false)
         }
-        return createViewHolderInternal(dataItem.javaClass, view!!)
+        val holder = createViewHolderInternal(dataItem.javaClass, view!!)
+        return holder
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

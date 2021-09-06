@@ -10,7 +10,10 @@ import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
-import android.widget.*
+import android.widget.ImageView
+import android.widget.RadioGroup
+import android.widget.RelativeLayout
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import org.tech.repos.base.lib.utils.DisplayUtil
 import org.tech.repos.base.ui.R
@@ -121,10 +124,30 @@ open class XToolBar @JvmOverloads constructor(
 
         if (titleType == 0) {//文字模式
             val array = context.obtainStyledAttributes(titleResourseId, R.styleable.titleAppearance)
-            val titleSize = array.getDimensionPixelSize(
-                R.styleable.titleAppearance_textSize,
-                applyUnit(TypedValue.COMPLEX_UNIT_SP, 18f)
-            )
+            var titleSize = 0
+            if(!TextUtils.isEmpty(title)){
+                when {
+                    title?.length ?: 0 < 12 -> {
+                        titleSize = array.getDimensionPixelSize(
+                            R.styleable.titleAppearance_textSize,
+                            applyUnit(TypedValue.COMPLEX_UNIT_SP, 18f)
+                        )
+                    }
+                    title?.length in 12..16 -> {
+                        titleSize = array.getDimensionPixelSize(
+                            R.styleable.titleAppearance_textSize,
+                            applyUnit(TypedValue.COMPLEX_UNIT_SP, 17f)
+                        )
+                    }
+                    else -> {
+                        titleSize = array.getDimensionPixelSize(
+                            R.styleable.titleAppearance_textSize,
+                            applyUnit(TypedValue.COMPLEX_UNIT_SP, 16f)
+                        )
+                    }
+                }
+                
+            }
             val titleColor = array.getColor(R.styleable.titleAppearance_textColor, Color.BLACK)
             array.recycle()
 
@@ -236,9 +259,22 @@ open class XToolBar @JvmOverloads constructor(
     fun changeTitle(title: String?) {
         titleView?.let {
             if (TextUtils.isEmpty(title)) {
-                titleView!!.text = ""
+                titleView?.text = ""
             } else {
-                titleView!!.text = title
+                val titleSize  = when {
+                        title?.length ?: 0 < 12 -> {
+                            applyUnit(TypedValue.COMPLEX_UNIT_SP, 18f)
+                        }
+                        title?.length in 12..16 -> {
+                            applyUnit(TypedValue.COMPLEX_UNIT_SP, 17f)
+                        }
+                        else -> {
+                            applyUnit(TypedValue.COMPLEX_UNIT_SP, 15f)
+                        }
+                    }
+                
+                titleView?.setTextSize(TypedValue.COMPLEX_UNIT_PX, titleSize.toFloat())
+                titleView?.text = title
             }
         }
     }
