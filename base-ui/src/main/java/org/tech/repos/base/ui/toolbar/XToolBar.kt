@@ -10,6 +10,7 @@ import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RadioGroup
 import android.widget.RelativeLayout
@@ -64,8 +65,18 @@ open class XToolBar @JvmOverloads constructor(
         val subTitleResourseId = typeArray.getResourceId(R.styleable.XToolBar_subTitleAppearance, 0)
         parseSubTitle(subTitleEnable, subTitleType, subTitleResourseId, subTitleStr, subTitleImage)
 
+        val showLine = typeArray.getBoolean(R.styleable.XToolBar_showLine, false)
+        if(showLine){
+            val params = LayoutParams(LayoutParams.MATCH_PARENT, 2)
+            params.addRule(ALIGN_PARENT_BOTTOM)
+            val line = View(context)
+            line.setBackgroundColor(Color.parseColor("#40000000"))
+            addView(line,params)
+        }
 
         typeArray.recycle()
+        
+        
     }
 
     private fun parseSubTitle(

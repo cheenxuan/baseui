@@ -25,6 +25,7 @@
         <attr name="actionEnable" format="boolean"></attr>
         <attr name="titleAppearance" format="reference"></attr>
         <attr name="subTitleAppearance" format="reference"></attr>
+        <attr name="showLine" format="boolean"></attr>
     </declare-styleable>
     
     <declare-styleable name="TabLayout">
