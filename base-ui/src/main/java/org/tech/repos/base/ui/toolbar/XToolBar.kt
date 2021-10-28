@@ -70,7 +70,7 @@ open class XToolBar @JvmOverloads constructor(
             val params = LayoutParams(LayoutParams.MATCH_PARENT, 2)
             params.addRule(ALIGN_PARENT_BOTTOM)
             val line = View(context)
-            line.setBackgroundColor(Color.parseColor("#40000000"))
+            line.setBackgroundColor(Color.parseColor("#d3d3d3"))
             addView(line,params)
         }
 
