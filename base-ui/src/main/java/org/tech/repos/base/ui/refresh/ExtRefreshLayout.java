@@ -1,6 +1,8 @@
 package org.tech.repos.base.ui.refresh;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -12,6 +14,7 @@ import android.widget.Scroller;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 
 /**
  * Author: xuan
@@ -28,6 +31,8 @@ public class ExtRefreshLayout extends FrameLayout implements ExtRefresh {
     private int mLastY;
     private boolean disableRefreshScroll;
     private AutoScroller mAutoScroller;
+    private long refreshTime = 0L;
+    private Handler handler = new Handler(Looper.getMainLooper());
     
     public ExtRefreshLayout(@NonNull Context context) {
         this(context,null);
@@ -44,7 +49,7 @@ public class ExtRefreshLayout extends FrameLayout implements ExtRefresh {
 
     private void init() {
         mGestureDetector = new GestureDetector(getContext(), extGestureDetector);
-        mAutoScroller = new AutoScroller();
+//        mAutoScroller = new AutoScroller();
     }
 
     @Override
@@ -54,14 +59,26 @@ public class ExtRefreshLayout extends FrameLayout implements ExtRefresh {
 
     @Override
     public void refreshFinished() {
-        View head = getChildAt(0);
-        mExtOverView.onFinish();
-        mExtOverView.setState(ExtOverView.RefreshState.STATE_INIT);
-        int bottom = head.getBottom();
-        if (bottom > 0) {
-            recover(bottom);
+        long time = System.currentTimeMillis() - refreshTime;
+        long delay = 0;
+//        System.out.println("refreshFinished:: time = " + time);
+        if(time < 400 && time > 0){
+            delay = time;
+        }else{
+            delay = 0;
         }
-        mState = ExtOverView.RefreshState.STATE_INIT;
+
+        handler.postDelayed(() -> {
+            View head = getChildAt(0);
+            int bottom = head.getBottom();
+//            System.out.println("refreshFinished:: bottom = " + bottom);
+            if (bottom > 0) {
+                recover(bottom);
+            }
+            mExtOverView.onFinish();
+            mExtOverView.setState(ExtOverView.RefreshState.STATE_INIT);
+            mState = ExtOverView.RefreshState.STATE_INIT;
+        }, delay);
     }
 
     @Override
@@ -134,6 +151,7 @@ public class ExtRefreshLayout extends FrameLayout implements ExtRefresh {
      * @return
      */
     private boolean moveDown(int offsetY, boolean nonAuto) {
+//        System.out.println("moveDown::  offsetY = "+offsetY+"  nonAuto = " + nonAuto);
         View head = getChildAt(0);
         View child = getChildAt(1);
         int childTop = child.getTop() + offsetY;
@@ -144,6 +162,7 @@ public class ExtRefreshLayout extends FrameLayout implements ExtRefresh {
             head.offsetTopAndBottom(offsetY);
             child.offsetTopAndBottom(offsetY);
             if (mState != ExtOverView.RefreshState.STATE_REFRESH) {
+                mExtOverView.setState(ExtOverView.RefreshState.STATE_INIT);
                 mState = ExtOverView.RefreshState.STATE_INIT;
             }
         } else if (mState == ExtOverView.RefreshState.STATE_REFRESH && childTop > mExtOverView.mPullRefreshHeight) {
@@ -151,7 +170,7 @@ public class ExtRefreshLayout extends FrameLayout implements ExtRefresh {
             return false;
         } else if (childTop <= mExtOverView.mPullRefreshHeight) {
             //还没超出设定的刷新距离
-            if (mExtOverView.getState() != ExtOverView.RefreshState.STATE_VISIBLE && nonAuto) {
+            if (mState != ExtOverView.RefreshState.STATE_VISIBLE && nonAuto) {
                 //头部开始显示
                 mExtOverView.onVisible();
                 mExtOverView.setState(ExtOverView.RefreshState.STATE_VISIBLE);
@@ -163,13 +182,15 @@ public class ExtRefreshLayout extends FrameLayout implements ExtRefresh {
 
             if (childTop == mExtOverView.mPullRefreshHeight && mState == ExtOverView.RefreshState.STATE_OVER_RELEASE) {
                 //下拉刷新完成
+//                System.out.println("moveDown: -------onRefresh--------");
                 refresh();
             }
         } else {
-            if (mExtOverView.getState() != ExtOverView.RefreshState.STATE_OVER && nonAuto) {
+            if (mState != ExtOverView.RefreshState.STATE_OVER && nonAuto) {
                 //超出刷新位置
                 mExtOverView.onOver();
                 mExtOverView.setState(ExtOverView.RefreshState.STATE_OVER);
+                mState = ExtOverView.RefreshState.STATE_OVER;
             }
             head.offsetTopAndBottom(offsetY);
             child.offsetTopAndBottom(offsetY);
@@ -186,10 +207,11 @@ public class ExtRefreshLayout extends FrameLayout implements ExtRefresh {
      */
     private void refresh() {
         if (mHiRefreshListener != null) {
-            mState = ExtOverView.RefreshState.STATE_REFRESH;
+            refreshTime = System.currentTimeMillis();
             mExtOverView.onRefresh();
             mExtOverView.setState(ExtOverView.RefreshState.STATE_REFRESH);
-            mHiRefreshListener.onRefresh();
+            mState = ExtOverView.RefreshState.STATE_REFRESH;
+            handler.postDelayed(() -> mHiRefreshListener.onRefresh(),200);
         }
     }
 
@@ -222,9 +244,12 @@ public class ExtRefreshLayout extends FrameLayout implements ExtRefresh {
     private void recover(int dis) {
         if (mHiRefreshListener != null && dis > mExtOverView.mPullRefreshHeight) {
             //滚动到指定位置 dis - mHiOverView.mPullRefreshHeight
+            mAutoScroller = new AutoScroller();
             mAutoScroller.recover(dis - mExtOverView.mPullRefreshHeight);
+            mExtOverView.setState(ExtOverView.RefreshState.STATE_OVER_RELEASE);
             mState = ExtOverView.RefreshState.STATE_OVER_RELEASE;
         } else {
+            mAutoScroller = new AutoScroller();
             mAutoScroller.recover(dis);
         }
     }
@@ -255,7 +280,7 @@ public class ExtRefreshLayout extends FrameLayout implements ExtRefresh {
 
     private class AutoScroller implements Runnable {
         private Scroller mScroller;
-        private int mLastY;
+        private volatile int mLastY;
         private boolean mIsFinished;
 
         public AutoScroller() {
@@ -264,9 +289,12 @@ public class ExtRefreshLayout extends FrameLayout implements ExtRefresh {
         }
 
         @Override
-        public void run() {
+        public synchronized void run() {
+//            System.out.println("AutoScroll:::: run:: mScroller.computeScrollOffset() = " + mScroller.computeScrollOffset());
             if (mScroller.computeScrollOffset()) {//还未完成滚动
+//                System.out.println("AutoScroll:::: run:: -> moveDown() mLastY = " + mLastY +" mScroller.getCurrY() = " + mScroller.getCurrY());
                 moveDown(mLastY - mScroller.getCurrY(), false);
+//                System.out.println("--------------mLastY = mScroller.getCurrY()--------------------");
                 mLastY = mScroller.getCurrY();
                 post(this);
             } else {
@@ -280,8 +308,10 @@ public class ExtRefreshLayout extends FrameLayout implements ExtRefresh {
                 return;
             }
             removeCallbacks(this);
+//            System.out.println("--------------mLastY = 0--------------------");
             mLastY = 0;
             mIsFinished = false;
+//            System.out.println("AutoScroll:::: recover:: mLastY = " + mLastY +" mIsFinished = " + mIsFinished + " dis = " + dis);
             mScroller.startScroll(0, 0, 0, dis, 300);
             post(this);
         }
