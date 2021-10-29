@@ -49,7 +49,7 @@ public class ExtRefreshLayout extends FrameLayout implements ExtRefresh {
 
     private void init() {
         mGestureDetector = new GestureDetector(getContext(), extGestureDetector);
-//        mAutoScroller = new AutoScroller();
+        mAutoScroller = new AutoScroller();
     }
 
     @Override
@@ -244,12 +244,12 @@ public class ExtRefreshLayout extends FrameLayout implements ExtRefresh {
     private void recover(int dis) {
         if (mHiRefreshListener != null && dis > mExtOverView.mPullRefreshHeight) {
             //滚动到指定位置 dis - mHiOverView.mPullRefreshHeight
-            mAutoScroller = new AutoScroller();
+//            mAutoScroller = new AutoScroller();
             mAutoScroller.recover(dis - mExtOverView.mPullRefreshHeight);
             mExtOverView.setState(ExtOverView.RefreshState.STATE_OVER_RELEASE);
             mState = ExtOverView.RefreshState.STATE_OVER_RELEASE;
         } else {
-            mAutoScroller = new AutoScroller();
+//            mAutoScroller = new AutoScroller();
             mAutoScroller.recover(dis);
         }
     }
