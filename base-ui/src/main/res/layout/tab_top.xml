@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:textColor="@android:color/black"
-        android:textSize="17dp"/>
+        android:textSize="15sp"/>
     
     <View
         android:id="@+id/tab_top_indicator"

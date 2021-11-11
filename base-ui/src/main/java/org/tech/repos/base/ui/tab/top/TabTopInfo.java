@@ -21,6 +21,8 @@ public class TabTopInfo<Color> extends TabInfo {
     public Color defaultColor;
     public Color tintColor;
     public TabType tabType;
+    public float defaultSize = 15;
+    public float selectedSize = 15;
 
     public TabTopInfo(String name, Bitmap defaultBitmap, Bitmap selectedBitmap) {
         this.name = name;

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,9 +72,11 @@ public class TabTop extends RelativeLayout implements ITab<TabTopInfo<?>> {
 
             if (selected) {
                 indicator.setVisibility(View.VISIBLE);
+                tabNameView.setTextSize(TypedValue.COMPLEX_UNIT_SP,tabInfo.selectedSize);
                 tabNameView.setTextColor(getTextColor(tabInfo.tintColor));
             } else {
                 indicator.setVisibility(View.GONE);
+                tabNameView.setTextSize(TypedValue.COMPLEX_UNIT_SP,tabInfo.defaultSize);
                 tabNameView.setTextColor(getTextColor(tabInfo.defaultColor));
             }
         } else if(tabInfo.tabType == TabTopInfo.TabType.BITMAP){
