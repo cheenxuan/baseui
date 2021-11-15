@@ -66,11 +66,12 @@ open class XToolBar @JvmOverloads constructor(
         parseSubTitle(subTitleEnable, subTitleType, subTitleResourseId, subTitleStr, subTitleImage)
 
         val showLine = typeArray.getBoolean(R.styleable.XToolBar_showLine, false)
+        val showLineColor = typeArray.getColor(R.styleable.XToolBar_toolbarBotoomLineColor, Color.parseColor("#d3d3d3"))
         if(showLine){
             val params = LayoutParams(LayoutParams.MATCH_PARENT, 2)
             params.addRule(ALIGN_PARENT_BOTTOM)
             val line = View(context)
-            line.setBackgroundColor(Color.parseColor("#d3d3d3"))
+            line.setBackgroundColor(showLineColor)
             addView(line,params)
         }
 

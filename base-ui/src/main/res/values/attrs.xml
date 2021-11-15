@@ -26,6 +26,7 @@
         <attr name="titleAppearance" format="reference"></attr>
         <attr name="subTitleAppearance" format="reference"></attr>
         <attr name="showLine" format="boolean"></attr>
+        <attr name="toolbarBotoomLineColor" format="reference"></attr>
     </declare-styleable>
     
     <declare-styleable name="TabLayout">
