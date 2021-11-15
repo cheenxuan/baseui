@@ -5,10 +5,12 @@ import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -27,7 +29,7 @@ import org.tech.repos.base.ui.R;
  * <p>
  * Describe:
  */
-public class TabTop extends RelativeLayout implements ITab<TabTopInfo<?>> {
+public class TabTop extends LinearLayout implements ITab<TabTopInfo<?>> {
 
     private TabTopInfo<?> tabInfo;
     private ImageView tabImageView;
@@ -48,6 +50,9 @@ public class TabTop extends RelativeLayout implements ITab<TabTopInfo<?>> {
     }
     
     private void init() {
+        
+        setGravity(Gravity.CENTER);
+        
         LayoutInflater.from(getContext()).inflate(R.layout.tab_top,this);
         tabImageView = findViewById(R.id.iv_image);
         tabNameView = findViewById(R.id.tv_trans_type);
@@ -114,12 +119,12 @@ public class TabTop extends RelativeLayout implements ITab<TabTopInfo<?>> {
     }
 
     @Override
-    public void onTabSelectedChange(int index, @Nullable TabTopInfo<?> preInfo, @NonNull TabTopInfo<?> nextInfo) {
-        if (preInfo != tabInfo && nextInfo != tabInfo || preInfo == nextInfo) {
+    public void onTabSelectedChange(int index, @Nullable TabTopInfo<?> prevInfo, @NonNull TabTopInfo<?> nextInfo) {
+        if (prevInfo != tabInfo && nextInfo != tabInfo || prevInfo == nextInfo) {
             return;
         }
 
-        if (preInfo == tabInfo) {
+        if (prevInfo == tabInfo) {
             inflateInfo(false,false);
         }else{
             inflateInfo(true,false);
