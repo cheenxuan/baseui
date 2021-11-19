@@ -324,6 +324,10 @@ open class XToolBar @JvmOverloads constructor(
             }
         })
     }
+    
+    fun changeSubTitleColor(color:Int){
+        subTitleView?.setTextColor(color)
+    }
 
     private fun applyUnit(unit: Int, value: Float): Int {
         return TypedValue.applyDimension(unit, value, resources.displayMetrics).toInt()
