@@ -116,8 +116,7 @@ public class TabTopLayout extends HorizontalScrollView implements ITabLayout<Tab
         if (tabWith == 0) {
             tabWith = tabTop.getWidth();
         }
-
-        System.out.println("是否点击了左侧或者右侧：" + ((loc[0] + tabWith / 2) > DisplayUtil.INSTANCE.getDisplayHeightInPx(getContext()) / 2));
+        
         //判断点击了屏幕左侧还是右侧
         if ((loc[0] + tabWith / 2) > DisplayUtil.INSTANCE.getDisplayWidthInPx(getContext()) / 2) {
             scrollWidth = rangeScrollWidth(index, 2);
