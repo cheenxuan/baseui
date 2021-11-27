@@ -193,7 +193,7 @@ open class XToolBar @JvmOverloads constructor(
 
             actionBack = ImageView(context)
             actionBack?.setImageDrawable(drawable)
-
+            
             val width = DisplayUtil.dp2px(25f, resources)
             val params = LayoutParams(width, width)
             val margin = DisplayUtil.dp2px(14f, resources)
@@ -205,8 +205,7 @@ open class XToolBar @JvmOverloads constructor(
                 params.leftMargin = margin
             }
             params.addRule(CENTER_VERTICAL)
-
-
+            actionBack?.setPadding(DisplayUtil.dp2px(3f, resources),DisplayUtil.dp2px(3f, resources),DisplayUtil.dp2px(3f, resources),DisplayUtil.dp2px(3f, resources))
             addView(actionBack, params)
             actionBack?.visibility = View.VISIBLE
 
