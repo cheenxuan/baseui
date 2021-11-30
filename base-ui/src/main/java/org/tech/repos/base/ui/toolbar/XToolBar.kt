@@ -363,6 +363,15 @@ open class XToolBar @JvmOverloads constructor(
         }
     }
 
+    fun setOnActionSubImageCallBack(onPress: (view: View?) -> Unit?) {
+        subTitleImageView?.let { action ->
+            action.setOnClickListener {
+                onPress(it)
+            }
+        }
+    }
+
+
     fun setOnActionBackCallback(onPress: (view: View?) -> Unit?) {
         actionBack?.let { action ->
             action.setOnClickListener {
