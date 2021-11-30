@@ -2,9 +2,12 @@ package org.tech.repos.base.ui.toolbar
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Build
+import android.os.Handler
+import android.os.Message
 import android.text.TextUtils
 import android.util.AttributeSet
 import android.util.TypedValue
@@ -38,6 +41,12 @@ open class XToolBar @JvmOverloads constructor(
     private var subTitleImageView: ImageView? = null
     private var actionBack: ImageView? = null
     private var radioGroup: RadioGroup? = null
+    private var handler = object : Handler() {
+        override fun handleMessage(msg: Message?) {
+            super.handleMessage(msg)
+            
+        }
+    }
 
     init {
 
@@ -66,18 +75,21 @@ open class XToolBar @JvmOverloads constructor(
         parseSubTitle(subTitleEnable, subTitleType, subTitleResourseId, subTitleStr, subTitleImage)
 
         val showLine = typeArray.getBoolean(R.styleable.XToolBar_showLine, false)
-        val showLineColor = typeArray.getColor(R.styleable.XToolBar_toolbarBotoomLineColor, Color.parseColor("#d3d3d3"))
-        if(showLine){
+        val showLineColor = typeArray.getColor(
+            R.styleable.XToolBar_toolbarBotoomLineColor,
+            Color.parseColor("#d3d3d3")
+        )
+        if (showLine) {
             val params = LayoutParams(LayoutParams.MATCH_PARENT, 2)
             params.addRule(ALIGN_PARENT_BOTTOM)
             val line = View(context)
             line.setBackgroundColor(showLineColor)
-            addView(line,params)
+            addView(line, params)
         }
 
         typeArray.recycle()
-        
-        
+
+
     }
 
     private fun parseSubTitle(
@@ -106,7 +118,7 @@ open class XToolBar @JvmOverloads constructor(
                 )
                 val subTitleColor =
                     array.getColor(R.styleable.titleAppearance_textColor, Color.BLACK)
-                
+
                 subTitleView =
                     createSubTitleView(subTitleColor, TypedValue.COMPLEX_UNIT_PX, subTitleSize)
                 subTitleView?.setText(subTitle)
@@ -137,7 +149,7 @@ open class XToolBar @JvmOverloads constructor(
         if (titleType == 0) {//文字模式
             val array = context.obtainStyledAttributes(titleResourseId, R.styleable.titleAppearance)
             var titleSize = 0
-            if(!TextUtils.isEmpty(title)){
+            if (!TextUtils.isEmpty(title)) {
                 when {
                     title?.length ?: 0 < 12 -> {
                         titleSize = array.getDimensionPixelSize(
@@ -158,7 +170,7 @@ open class XToolBar @JvmOverloads constructor(
                         )
                     }
                 }
-                
+
             }
             val titleColor = array.getColor(R.styleable.titleAppearance_textColor, Color.BLACK)
             array.recycle()
@@ -193,7 +205,7 @@ open class XToolBar @JvmOverloads constructor(
 
             actionBack = ImageView(context)
             actionBack?.setImageDrawable(drawable)
-            
+
             val width = DisplayUtil.dp2px(25f, resources)
             val params = LayoutParams(width, width)
             val margin = DisplayUtil.dp2px(14f, resources)
@@ -205,7 +217,12 @@ open class XToolBar @JvmOverloads constructor(
                 params.leftMargin = margin
             }
             params.addRule(CENTER_VERTICAL)
-            actionBack?.setPadding(DisplayUtil.dp2px(3f, resources),DisplayUtil.dp2px(3f, resources),DisplayUtil.dp2px(3f, resources),DisplayUtil.dp2px(3f, resources))
+            actionBack?.setPadding(
+                DisplayUtil.dp2px(3f, resources),
+                DisplayUtil.dp2px(3f, resources),
+                DisplayUtil.dp2px(3f, resources),
+                DisplayUtil.dp2px(3f, resources)
+            )
             addView(actionBack, params)
             actionBack?.visibility = View.VISIBLE
 
@@ -252,6 +269,44 @@ open class XToolBar @JvmOverloads constructor(
         }
     }
 
+    fun changeSubTitleImage(show: Boolean, bitmap: Bitmap? = null) {
+
+        if (!show) {
+            if (subTitleImageView != null && subTitleImageView?.visibility == View.VISIBLE) {
+                subTitleImageView?.visibility = View.GONE
+            }
+        } else {
+            if (subTitleView != null && subTitleView?.visibility == View.VISIBLE) {
+                subTitleView?.visibility = View.GONE
+            }
+
+            if (subTitleImageView == null) {
+                subTitleImageView = createSubTitleImageView()
+
+                val params = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
+                params.addRule(ALIGN_PARENT_END)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                    params.marginEnd = DisplayUtil.dp2px(16f, resources)
+                } else {
+                    params.rightMargin = DisplayUtil.dp2px(16f, resources)
+                }
+                addView(subTitleImageView, params)
+            }
+
+
+            if(bitmap != null){
+                subTitleImageView?.setImageBitmap(bitmap)
+                subTitleImageView?.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private fun createSubTitleImageView(): ImageView {
+        val imageView = ImageView(context)
+        imageView.scaleType = ImageView.ScaleType.CENTER_CROP
+        return imageView
+    }
+
     private fun createSubTitleView(
         textColor: Int = resources.getColor(R.color.color_666),
         textTypeUnit: Int = TypedValue.COMPLEX_UNIT_SP,
@@ -272,18 +327,18 @@ open class XToolBar @JvmOverloads constructor(
             if (TextUtils.isEmpty(title)) {
                 titleView?.text = ""
             } else {
-                val titleSize  = when {
-                        title?.length ?: 0 < 12 -> {
-                            applyUnit(TypedValue.COMPLEX_UNIT_SP, 18f)
-                        }
-                        title?.length in 12..16 -> {
-                            applyUnit(TypedValue.COMPLEX_UNIT_SP, 17f)
-                        }
-                        else -> {
-                            applyUnit(TypedValue.COMPLEX_UNIT_SP, 15f)
-                        }
+                val titleSize = when {
+                    title?.length ?: 0 < 12 -> {
+                        applyUnit(TypedValue.COMPLEX_UNIT_SP, 18f)
                     }
-                
+                    title?.length in 12..16 -> {
+                        applyUnit(TypedValue.COMPLEX_UNIT_SP, 17f)
+                    }
+                    else -> {
+                        applyUnit(TypedValue.COMPLEX_UNIT_SP, 15f)
+                    }
+                }
+
                 titleView?.setTextSize(TypedValue.COMPLEX_UNIT_PX, titleSize.toFloat())
                 titleView?.text = title
             }
@@ -323,8 +378,8 @@ open class XToolBar @JvmOverloads constructor(
             }
         })
     }
-    
-    fun changeSubTitleColor(color:Int){
+
+    fun changeSubTitleColor(color: Int) {
         subTitleView?.setTextColor(color)
     }
 
