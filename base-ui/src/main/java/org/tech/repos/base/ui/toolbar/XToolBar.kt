@@ -285,6 +285,7 @@ open class XToolBar @JvmOverloads constructor(
 
                 val params = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
                 params.addRule(ALIGN_PARENT_END)
+                params.addRule(CENTER_VERTICAL)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                     params.marginEnd = DisplayUtil.dp2px(16f, resources)
                 } else {
