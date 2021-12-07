@@ -184,6 +184,19 @@ class UiAdapter(context: Context) : RecyclerView.Adapter<ViewHolder>() {
         }
     }
 
+    /****
+     * 通过item来进行删除
+     */
+    fun removeItems(dataItems: List<UiDataItem<*, *>>,notify: Boolean = true) {
+        dataItems.forEach {
+            removeItem(it)
+        }
+
+        if (notify) {
+            notifyDataSetChanged()
+        }
+    }
+
     fun refreshItem(hiDataItem: UiDataItem<*, *>) {
         val index = dataSets.indexOf(hiDataItem)
         notifyItemChanged(index)
