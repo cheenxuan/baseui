@@ -1,4 +1,4 @@
-package org.tech.repos.base.ui.wheelview.adapter;
+package org.tech.repos.base.ui.wheel.adapter;
 
 
 public interface WheelAdapter<T> {

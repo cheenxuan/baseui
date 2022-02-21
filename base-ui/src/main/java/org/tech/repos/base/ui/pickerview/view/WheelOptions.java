@@ -7,8 +7,8 @@ import android.view.View;
 import org.tech.repos.base.ui.R;
 import org.tech.repos.base.ui.pickerview.adapter.ArrayWheelAdapter;
 import org.tech.repos.base.ui.pickerview.listener.OnOptionsSelectChangeListener;
-import org.tech.repos.base.ui.wheelview.listener.OnItemSelectedListener;
-import org.tech.repos.base.ui.wheelview.view.WheelView;
+import org.tech.repos.base.ui.wheel.listener.OnItemSelectedListener;
+import org.tech.repos.base.ui.wheel.WheelView;
 
 import java.util.List;
 

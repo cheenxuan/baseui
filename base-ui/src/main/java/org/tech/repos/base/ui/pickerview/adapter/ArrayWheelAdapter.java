@@ -1,6 +1,7 @@
 package org.tech.repos.base.ui.pickerview.adapter;
 
-import org.tech.repos.base.ui.wheelview.adapter.WheelAdapter;
+
+import org.tech.repos.base.ui.wheel.adapter.WheelAdapter;
 
 import java.util.List;
 

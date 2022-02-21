@@ -1,4 +1,4 @@
-package org.tech.repos.base.ui.wheelview.interfaces;
+package org.tech.repos.base.ui.wheel.interfaces;
 
 /**
  * Created by Sai on 2016/7/13.

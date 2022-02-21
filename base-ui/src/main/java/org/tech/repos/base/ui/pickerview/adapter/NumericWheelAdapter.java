@@ -1,7 +1,6 @@
 package org.tech.repos.base.ui.pickerview.adapter;
 
-
-import org.tech.repos.base.ui.wheelview.adapter.WheelAdapter;
+import org.tech.repos.base.ui.wheel.adapter.WheelAdapter;
 
 /**
  * Numeric Wheel adapter.
@@ -13,6 +12,7 @@ public class NumericWheelAdapter implements WheelAdapter {
 
     /**
      * Constructor
+     *
      * @param minValue the wheel min value
      * @param maxValue the wheel max value
      */
@@ -36,9 +36,9 @@ public class NumericWheelAdapter implements WheelAdapter {
     }
 
     @Override
-    public int indexOf(Object o){
+    public int indexOf(Object o) {
         try {
-            return (int)o - minValue;
+            return (int) o - minValue;
         } catch (Exception e) {
             return -1;
         }

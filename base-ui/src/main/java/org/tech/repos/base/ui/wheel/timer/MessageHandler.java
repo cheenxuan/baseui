@@ -1,9 +1,9 @@
-package org.tech.repos.base.ui.wheelview.timer;
+package org.tech.repos.base.ui.wheel.timer;
 
 import android.os.Handler;
 import android.os.Message;
 
-import org.tech.repos.base.ui.wheelview.view.WheelView;
+import org.tech.repos.base.ui.wheel.WheelView;
 
 /**
  * Handler 消息类

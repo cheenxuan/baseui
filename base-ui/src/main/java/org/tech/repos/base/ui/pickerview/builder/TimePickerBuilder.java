@@ -11,7 +11,7 @@ import org.tech.repos.base.ui.pickerview.listener.CustomListener;
 import org.tech.repos.base.ui.pickerview.listener.OnTimeSelectChangeListener;
 import org.tech.repos.base.ui.pickerview.listener.OnTimeSelectListener;
 import org.tech.repos.base.ui.pickerview.view.TimePickerView;
-import org.tech.repos.base.ui.wheelview.view.WheelView;
+import org.tech.repos.base.ui.wheel.WheelView;
 
 import java.util.Calendar;
 

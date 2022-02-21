@@ -1,4 +1,4 @@
-package org.tech.repos.base.ui.wheelview.listener;
+package org.tech.repos.base.ui.wheel.listener;
 
 
 public interface OnItemSelectedListener {

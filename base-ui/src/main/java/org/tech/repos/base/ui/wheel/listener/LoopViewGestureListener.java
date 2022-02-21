@@ -1,8 +1,8 @@
-package org.tech.repos.base.ui.wheelview.listener;
+package org.tech.repos.base.ui.wheel.listener;
 
 import android.view.MotionEvent;
 
-import org.tech.repos.base.ui.wheelview.view.WheelView;
+import org.tech.repos.base.ui.wheel.WheelView;
 
 
 /**

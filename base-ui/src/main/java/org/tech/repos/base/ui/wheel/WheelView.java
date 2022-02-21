@@ -1,4 +1,4 @@
-package org.tech.repos.base.ui.wheelview.view;
+package org.tech.repos.base.ui.wheel;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -15,18 +15,14 @@ import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-
-
-
 import org.tech.repos.base.ui.R;
-import org.tech.repos.base.ui.wheelview.adapter.WheelAdapter;
-import org.tech.repos.base.ui.wheelview.interfaces.IPickerViewData;
-import org.tech.repos.base.ui.wheelview.listener.LoopViewGestureListener;
-import org.tech.repos.base.ui.wheelview.listener.OnItemSelectedListener;
-import org.tech.repos.base.ui.wheelview.timer.InertiaTimerTask;
-import org.tech.repos.base.ui.wheelview.timer.MessageHandler;
-import org.tech.repos.base.ui.wheelview.timer.SmoothScrollTimerTask;
-
+import org.tech.repos.base.ui.wheel.adapter.WheelAdapter;
+import org.tech.repos.base.ui.wheel.interfaces.IPickerViewData;
+import org.tech.repos.base.ui.wheel.listener.LoopViewGestureListener;
+import org.tech.repos.base.ui.wheel.listener.OnItemSelectedListener;
+import org.tech.repos.base.ui.wheel.timer.InertiaTimerTask;
+import org.tech.repos.base.ui.wheel.timer.MessageHandler;
+import org.tech.repos.base.ui.wheel.timer.SmoothScrollTimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;

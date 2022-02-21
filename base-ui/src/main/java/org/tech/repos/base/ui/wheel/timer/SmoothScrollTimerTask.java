@@ -1,5 +1,5 @@
-package org.tech.repos.base.ui.wheelview.timer;
-import org.tech.repos.base.ui.wheelview.view.WheelView;
+package org.tech.repos.base.ui.wheel.timer;
+import org.tech.repos.base.ui.wheel.WheelView;
 
 import java.util.TimerTask;
 

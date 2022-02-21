@@ -10,7 +10,7 @@ import org.tech.repos.base.ui.pickerview.listener.CustomListener;
 import org.tech.repos.base.ui.pickerview.listener.OnOptionsSelectChangeListener;
 import org.tech.repos.base.ui.pickerview.listener.OnOptionsSelectListener;
 import org.tech.repos.base.ui.pickerview.view.OptionsPickerView;
-import org.tech.repos.base.ui.wheelview.view.WheelView;
+import org.tech.repos.base.ui.wheel.WheelView;
 
 
 /**
