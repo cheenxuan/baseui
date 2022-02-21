@@ -42,4 +42,18 @@
         <attr name="fullScrenn" format="boolean"></attr>
         <attr name="canScroll" format="boolean"></attr>
     </declare-styleable>
+
+    <declare-styleable name="pickerview">
+        <attr name="wheelview_gravity">
+            <enum name="center" value="17"/>
+            <enum name="left" value="3"/>
+            <enum name="right" value="5"/>
+        </attr>
+        <attr format="dimension" name="wheelview_textSize"/>
+        <attr format="color" name="wheelview_textColorOut"/>
+        <attr format="color" name="wheelview_textColorCenter"/>
+        <attr format="color" name="wheelview_dividerColor"/>
+        <attr format="dimension" name="wheelview_dividerWidth"/>
+        <attr format="float" name="wheelview_lineSpacingMultiplier"/>
+    </declare-styleable>
 </resources>
