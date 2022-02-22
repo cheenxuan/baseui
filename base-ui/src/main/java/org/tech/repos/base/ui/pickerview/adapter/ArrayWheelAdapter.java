@@ -36,12 +36,12 @@ public class ArrayWheelAdapter<T> implements WheelAdapter {
 
     @Override
     public int getItemsCount() {
-        return items.size();
+        return items == null ? 0 : items.size();
     }
 
     @Override
     public int indexOf(Object o) {
-        return items.indexOf(o);
+        return items == null ? -1 : items.indexOf(o);
     }
 
 }
