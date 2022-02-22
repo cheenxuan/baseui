@@ -22,11 +22,12 @@ import org.tech.repos.base.ui.tab.common.ITab
  * Describe:
  */
 class TabBottom : RelativeLayout, ITab<TabBottomInfo<*>> {
-    
+
     private var tabNameView: TextView
     private var tabIconView: TextView
     private var tabImageView: ImageView
     private var tabInfo: TabBottomInfo<*>? = null
+    private var imageLoader: ImageLoaderInterface<View>? = null
 
     constructor(context: Context) : this(context, null) {}
 
@@ -88,6 +89,22 @@ class TabBottom : RelativeLayout, ITab<TabBottomInfo<*>> {
                 tabImageView.setImageBitmap(tabInfo!!.defaultBitmap)
                 tabNameView.setTextColor(getTextColor(tabInfo!!.defaultColor))
             }
+        } else if (tabInfo!!.tabType == TabBottomInfo.TabType.URL) {
+            if (init) {
+                tabIconView.visibility = View.GONE
+                tabImageView.visibility = View.VISIBLE
+                if (!TextUtils.isEmpty(tabInfo!!.name)) {
+                    tabNameView.text = tabInfo!!.name
+                }
+            }
+
+            if (selected) {
+                imageLoader?.displayImage(context, tabInfo!!.selectedUrl, tabImageView)
+                tabNameView.setTextColor(getTextColor(tabInfo!!.tintColor))
+            } else {
+                imageLoader?.displayImage(context, tabInfo!!.defaultUrl, tabImageView)
+                tabNameView.setTextColor(getTextColor(tabInfo!!.defaultColor))
+            }
         }
     }
 
@@ -128,6 +145,10 @@ class TabBottom : RelativeLayout, ITab<TabBottomInfo<*>> {
 
     fun getTabNameView(): TextView {
         return tabNameView
+    }
+
+    fun setImageLoader(imageLoader: ImageLoaderInterface<View>) {
+        this.imageLoader = imageLoader
     }
 
     @ColorInt

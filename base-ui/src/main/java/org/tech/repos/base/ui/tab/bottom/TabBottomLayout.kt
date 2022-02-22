@@ -41,6 +41,7 @@ class TabBottomLayout @JvmOverloads constructor(
     private var infoList: List<TabBottomInfo<*>>? = null
     private val tabSelectedListeners =
         mutableListOf<ITabLayout.OnTabSelectedListener<TabBottomInfo<*>>>()
+    private var imageLoader: ImageLoaderInterface<*>? = null
 
     override fun findTab(data: TabBottomInfo<*>): TabBottom? {
         val ll = findViewWithTag<ViewGroup>(TAG_TAB_BOTTOM)
@@ -95,7 +96,11 @@ class TabBottomLayout @JvmOverloads constructor(
             params.gravity = Gravity.BOTTOM
             params.leftMargin = index * width
 
+            
             val tabBottom = TabBottom(context)
+            if (imageLoader != null) {
+                
+            }
             tabSelectedListeners.add(tabBottom)
             tabBottom.setTabInfo(info)
             fl.addView(tabBottom, params)
@@ -148,6 +153,10 @@ class TabBottomLayout @JvmOverloads constructor(
 
     fun setTabLineColor(tabLineColor: String) {
         this.bottomLineColor = tabLineColor
+    }
+
+    fun setImageLoader(imageLoader: ImageLoaderInterface<*>) {
+        this.imageLoader = imageLoader
     }
 
     private fun fixContentView() {
