@@ -105,7 +105,16 @@ public class Banner extends FrameLayout implements IBanner {
 
     @Override
     public void setOnBannerClickListener(OnBannerClickListener onBannerClickListener) {
+        delegate.setOnBannerClickListener(onBannerClickListener);
+    }
 
-         delegate.setOnBannerClickListener(onBannerClickListener);
+    @Override
+    public void startPlay() {
+        delegate.startPlay();
+    }
+
+    @Override
+    public void stopPlay() {
+        delegate.stopPlay();
     }
 }

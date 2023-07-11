@@ -78,7 +78,6 @@ public class ViewPager extends androidx.viewpager.widget.ViewPager {
                 e.printStackTrace();
             }
         }
-        start();
     }
 
     @Override
@@ -87,7 +86,6 @@ public class ViewPager extends androidx.viewpager.widget.ViewPager {
             super.onDetachedFromWindow();
         }
         stop();
-
     }
 
     @Override
@@ -101,8 +99,6 @@ public class ViewPager extends androidx.viewpager.widget.ViewPager {
             Field scrollerFiled = androidx.viewpager.widget.ViewPager.class.getDeclaredField("mScroller");
             scrollerFiled.setAccessible(true);
             scrollerFiled.set(this,new BannerScroller(getContext(),duration));
-
-
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -1,6 +1,7 @@
 package org.tech.repos.base.ui.banner.core;
 
 import android.content.Context;
+import android.os.SystemClock;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,11 @@ public class BannerAdapter extends PagerAdapter {
     private IBanner.OnBannerClickListener mBannerClickListener;
     private IBindAdapter mBindAdapter;
     private List<? extends BannerMo> models = new ArrayList<>();
+    //fix: data.size == 2
+    private List<? extends BannerMo> fakeModels = new ArrayList<>();
+    //No quick clicks
+    private long lastClickTime;
+    private long interval = 1000L;
 
     public BannerAdapter(Context context) {
         this.mContext = context;
@@ -28,6 +34,12 @@ public class BannerAdapter extends PagerAdapter {
 
     public void setBannerData(@NotNull List<? extends BannerMo> models) {
         this.models = models;
+
+        //fix: data.size == 2
+        if (models.size() == 2) {
+            this.fakeModels = models;
+        }
+
         //初始化数据
         initCachedView();
         notifyDataSetChanged();
@@ -39,7 +51,7 @@ public class BannerAdapter extends PagerAdapter {
 
 
     public void setOnBannerClickListener(IBanner.OnBannerClickListener onBannerClickListener) {
-         this.mBannerClickListener = onBannerClickListener;
+        this.mBannerClickListener = onBannerClickListener;
 
     }
 
@@ -79,9 +91,17 @@ public class BannerAdapter extends PagerAdapter {
      * @return
      */
     public int getRealCount() {
-        return models == null ? 0 : models.size();
-
+        return models == null ? 0 : models.size() + (fakeModels == null ? 0 : fakeModels.size());
     }
+
+    /***
+     * 获取fake Banner页面的数量
+     * @return
+     */
+    public int getFakeCount() {
+        return fakeModels == null ? 0 : fakeModels.size();
+    }
+
 
     /***
      * 获取初次展示的item的位置
@@ -113,12 +133,17 @@ public class BannerAdapter extends PagerAdapter {
         if (container.equals(viewHolder.rootView.getParent())) {
             container.removeView(viewHolder.rootView);
         }
-        
+
+        //fix: data.size == 2
+        if (realPosition >= getFakeCount()) {
+            realPosition -= getFakeCount();
+        }
+
         onBind(viewHolder, models.get(realPosition), realPosition);
         if (viewHolder.rootView.getParent() != null) {
             ((ViewGroup) viewHolder.rootView.getParent()).removeView(viewHolder.rootView);
         }
-        
+
         container.addView(viewHolder.rootView);
         return viewHolder.rootView;
     }
@@ -131,13 +156,18 @@ public class BannerAdapter extends PagerAdapter {
 
     @Override
     public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-        
+
     }
 
     protected void onBind(@NotNull final HiBannerViewHolder viewHolder, @NotNull final BannerMo bannerMo, int position) {
         viewHolder.rootView.setOnClickListener(v -> {
             if (mBannerClickListener != null) {
-                 mBannerClickListener.onBannerClick(viewHolder, bannerMo, position);
+                //No quick clicks
+                long currentTime = SystemClock.elapsedRealtime();
+                if (currentTime - lastClickTime > interval) {
+                    mBannerClickListener.onBannerClick(viewHolder, bannerMo, position);
+                    lastClickTime = currentTime;
+                }
             }
         });
         if (mBindAdapter != null) {
@@ -150,6 +180,11 @@ public class BannerAdapter extends PagerAdapter {
         for (int i = 0; i < models.size(); i++) {
             HiBannerViewHolder viewHolder = new HiBannerViewHolder(createView(LayoutInflater.from(mContext), null));
             mCacheViews.put(i, viewHolder);
+        }
+        //fix：data.size == 2 添加fakeView
+        for (int i = 0; i < fakeModels.size(); i++) {
+            HiBannerViewHolder viewHolder = new HiBannerViewHolder(createView(LayoutInflater.from(mContext), null));
+            mCacheViews.put(models.size() + i, viewHolder);
         }
     }
 
@@ -178,7 +213,7 @@ public class BannerAdapter extends PagerAdapter {
                 return (V) rootView;
             }
             if (this.viewSparseArray == null) {
-                this.viewSparseArray = new SparseArray<>(1);
+                this.viewSparseArray = new SparseArray<>();
             }
             V childView = (V) viewSparseArray.get(id);
             if (childView == null) {

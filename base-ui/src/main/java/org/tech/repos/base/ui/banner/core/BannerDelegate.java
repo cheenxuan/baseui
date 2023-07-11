@@ -29,6 +29,7 @@ public class BannerDelegate implements IBanner, androidx.viewpager.widget.ViewPa
     private OnBannerClickListener mOnBannerClickListener;
     private ViewPager mViewPager;
     private int mScrollDuration = -1;
+    private IBindAdapter bindAdapter;
 
     public BannerDelegate(Context context, Banner banner) {
         this.mContext = context;
@@ -45,6 +46,7 @@ public class BannerDelegate implements IBanner, androidx.viewpager.widget.ViewPa
     public void setBannerData(@NotNull List<? extends BannerMo> models) {
         setBannerData(R.layout.banner_item_image, models);
     }
+
     public void setAdapter(BannerAdapter adapter) {
         this.mAdapter = adapter;
     }
@@ -56,8 +58,21 @@ public class BannerDelegate implements IBanner, androidx.viewpager.widget.ViewPa
 
     @Override
     public void setOnBannerClickListener(OnBannerClickListener onBannerClickListener) {
-          this.mOnBannerClickListener = onBannerClickListener;
+        this.mOnBannerClickListener = onBannerClickListener;
+    }
 
+    @Override
+    public void startPlay() {
+        if (mViewPager != null) {
+            mViewPager.start();
+        }
+    }
+
+    @Override
+    public void stopPlay() {
+        if (mViewPager != null) {
+            mViewPager.stop();
+        }
     }
 
     @Override
@@ -90,7 +105,10 @@ public class BannerDelegate implements IBanner, androidx.viewpager.widget.ViewPa
 
     @Override
     public void setBindAdapter(IBindAdapter bindAdapter) {
-        mAdapter.setBindAdapter(bindAdapter);
+        this.bindAdapter = bindAdapter;
+        if (mAdapter != null) {
+            mAdapter.setBindAdapter(bindAdapter);
+        }
     }
 
     /***
@@ -114,9 +132,10 @@ public class BannerDelegate implements IBanner, androidx.viewpager.widget.ViewPa
         if (mIndicator == null) {
             mIndicator = new CircleIndicator(mContext);
         }
-        
+
         mIndicator.onInflate(mBannerMos.size());
         mAdapter.setLayoutResId(layoutResId);
+        mAdapter.setBindAdapter(bindAdapter);
         mAdapter.setBannerData(mBannerMos);
         mAdapter.setAutoPlay(mBannerMos.size() > 1);
         mAdapter.setLoop(mBannerMos.size() > 1);
@@ -151,6 +170,9 @@ public class BannerDelegate implements IBanner, androidx.viewpager.widget.ViewPa
 
     @Override
     public void onPageSelected(int position) {
+
+        System.out.println("--------------" + position + "----------------------");
+
         if (mAdapter.getRealCount() == 0) {
             return;
         }
@@ -159,7 +181,8 @@ public class BannerDelegate implements IBanner, androidx.viewpager.widget.ViewPa
             mOnPageChangeListener.onPageSelected(position);
         }
         if (mIndicator != null) {
-            mIndicator.onPointChange(position, mAdapter.getRealCount());
+            //fix：data.size == 2
+            mIndicator.onPointChange(position >= mAdapter.getFakeCount() ? position - mAdapter.getFakeCount() : position, mAdapter.getRealCount() - mAdapter.getFakeCount());
         }
     }
 
@@ -169,16 +192,16 @@ public class BannerDelegate implements IBanner, androidx.viewpager.widget.ViewPa
             mOnPageChangeListener.onPageScrollStateChanged(state);
         }
 
-        switch (state) {
-//            case 1://start Sliding
+//        switch (state) {
+//            case ViewPager.SCROLL_STATE_DRAGGING://start Sliding
 //                if (mViewPager.getCurrentItem() == count + 1) {
-//                    viewPager.setCurrentItem(1, false);
+//                    mViewPager.setCurrentItem(1, false);
 //                } else if (currentItem == 0) {
-//                    viewPager.setCurrentItem(count, false);
+//                    mViewPager.setCurrentItem(count, false);
 //                }
 //                break;
 //            case 2://end Sliding
 //                break;
-        }
+//        }
     }
 }

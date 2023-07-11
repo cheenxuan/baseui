@@ -36,10 +36,13 @@ public interface IBanner {
 
     void setScrollDuration(int duration);
 
-
     void setOnPageChangeListener(ViewPager.OnPageChangeListener onPageChangeListener);
 
     void setOnBannerClickListener(OnBannerClickListener onBannerClickListener);
+    
+    void startPlay();
+    
+    void stopPlay();
 
     interface OnBannerClickListener {
         void onBannerClick(@NotNull BannerAdapter.HiBannerViewHolder viewHolder, @NotNull BannerMo bannerMo, int position);

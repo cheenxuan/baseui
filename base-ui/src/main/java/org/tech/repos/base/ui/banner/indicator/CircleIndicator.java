@@ -19,7 +19,7 @@ import org.tech.repos.base.ui.R;
  * 圆形指示器
  */
 public class CircleIndicator extends FrameLayout implements Indicator<FrameLayout> {
-    private  static final int VWC = ViewGroup.LayoutParams.WRAP_CONTENT;
+    private static final int VWC = ViewGroup.LayoutParams.WRAP_CONTENT;
     /***
      * 正常状态下的指示点
      */
@@ -36,12 +36,13 @@ public class CircleIndicator extends FrameLayout implements Indicator<FrameLayou
      * 指示点上下内间距
      */
     private int mPointTopBottomPadding;
+
     public CircleIndicator(@NonNull Context context) {
-        this(context,null);
+        this(context, null);
     }
 
     public CircleIndicator(@NonNull Context context, @Nullable AttributeSet attrs) {
-        this(context, attrs,0);
+        this(context, attrs, 0);
     }
 
     public CircleIndicator(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
@@ -50,8 +51,8 @@ public class CircleIndicator extends FrameLayout implements Indicator<FrameLayou
     }
 
     private void init() {
-        mPointLeftRightPadding = DisplayUtil.INSTANCE.dp2px(5f,getContext().getResources());
-        mPointTopBottomPadding = DisplayUtil.INSTANCE.dp2px(15f,getContext().getResources());
+        mPointLeftRightPadding = DisplayUtil.INSTANCE.dp2px(5f, getContext().getResources());
+        mPointTopBottomPadding = DisplayUtil.INSTANCE.dp2px(12f, getContext().getResources());
     }
 
     @Override
@@ -62,45 +63,45 @@ public class CircleIndicator extends FrameLayout implements Indicator<FrameLayou
     @Override
     public void onInflate(int count) {
         removeAllViews();
-        if (count<2){
+        if (count < 2) {
             return;
         }
         LinearLayout groupView = new LinearLayout(getContext());
         groupView.setOrientation(LinearLayout.HORIZONTAL);
         ImageView imageView;
-        LinearLayout.LayoutParams imgViewParam = new LinearLayout.LayoutParams(VWC,VWC);
+        LinearLayout.LayoutParams imgViewParam = new LinearLayout.LayoutParams(VWC, VWC);
         imgViewParam.gravity = Gravity.CENTER_VERTICAL;
-        imgViewParam.setMargins(mPointLeftRightPadding,mPointTopBottomPadding,mPointLeftRightPadding,mPointTopBottomPadding);
-         for (int i =0;i<count;i++){
-             imageView = new ImageView(getContext());
-             imageView.setLayoutParams(imgViewParam);
-             if (i==0){
-                 imageView.setImageResource(mPointSelected);
-             }else{
-                 imageView.setImageResource(mPointNormal);
-             }
-             groupView.addView(imageView);
-         }
-         LayoutParams groupParam = new LayoutParams(VWC,VWC);
-         groupParam.gravity = Gravity.CENTER|Gravity.BOTTOM;
-         addView(groupView,groupParam);
+        imgViewParam.setMargins(mPointLeftRightPadding, mPointTopBottomPadding, mPointLeftRightPadding, mPointTopBottomPadding);
+        for (int i = 0; i < count; i++) {
+            imageView = new ImageView(getContext());
+            imageView.setLayoutParams(imgViewParam);
+            if (i == 0) {
+                imageView.setImageResource(mPointSelected);
+            } else {
+                imageView.setImageResource(mPointNormal);
+            }
+            groupView.addView(imageView);
+        }
+        LayoutParams groupParam = new LayoutParams(VWC, VWC);
+        groupParam.gravity = Gravity.CENTER | Gravity.BOTTOM;
+        addView(groupView, groupParam);
 
     }
 
     @Override
     public void onPointChange(int current, int count) {
         //存放指示器的线性布局
-          ViewGroup viewGroup = (ViewGroup) getChildAt(0);
-          for (int i=0;i<viewGroup.getChildCount();i++){
-              ImageView imageView = (ImageView) viewGroup.getChildAt(i);
-              if (i==current){
-                  imageView.setImageResource(mPointSelected);
-              }else{
-                  imageView.setImageResource(mPointNormal);
-              }
-              //重新布局一下
-              imageView.requestLayout();
-          }
+        ViewGroup viewGroup = (ViewGroup) getChildAt(0);
+        for (int i = 0; i < viewGroup.getChildCount(); i++) {
+            ImageView imageView = (ImageView) viewGroup.getChildAt(i);
+            if (i == current) {
+                imageView.setImageResource(mPointSelected);
+            } else {
+                imageView.setImageResource(mPointNormal);
+            }
+            //重新布局一下
+            imageView.requestLayout();
+        }
 
     }
 }
