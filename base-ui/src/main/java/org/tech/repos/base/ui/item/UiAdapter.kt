@@ -112,7 +112,7 @@ class UiAdapter(context: Context) : RecyclerView.Adapter<ViewHolder>() {
      * notify：是否进行刷新
      */
     fun addItemAt(index: Int, dataItem: UiDataItem<*, out ViewHolder>, notify: Boolean) {
-        if (index > 0) {
+        if (index >= 0) {
             dataSets.add(index, dataItem)
         } else {
             dataSets.add(dataItem)
